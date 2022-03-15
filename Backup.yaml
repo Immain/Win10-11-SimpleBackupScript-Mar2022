@@ -1,0 +1,23 @@
+# System Files Backup Script #
+- hosts: windows
+  gather_facts: yes
+  vars:
+    date: "{{ lookup('pipe', 'date +%Y%m%d-%H%M') }}"
+
+  tasks:
+  - name: Warn Users of Backup
+    win_msg:
+      display_seconds: 60
+      msg: Automated backup about to start. This will not disrupt any work. There is nothing you need to do, Thank you. - IT
+
+  - name: Start Backup of Documents
+    win_copy:
+      src: C:\Users\User\Documents\Hello-World
+      dest: C:\Temp\User-Documents-Backup-{{ date }}
+      remote_src: yes
+
+  - name: Start Backup of Outlook Profile
+    win_copy:
+      src: C:\Users\User\AppData\Local\Microsoft\Outlook
+      dest: C:\Temp\User-Outlook-Backup-{{ date }}
+      remote_src: yes
